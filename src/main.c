@@ -40,9 +40,10 @@ struct calibration_points {
 };
 
 static struct calibration_points calib_points = {
-    .screen_x = {20, 110, 105}, 
-    .screen_y = {20, 90, 127}  
+    .screen_x = {64, 20, 108, 108, 20},
+    .screen_y = {80, 20, 20, 140, 140}
 };
+
 static bool is_calibration_mode = false;
 static int point_index = 0;
 static lv_obj_t *hello_world_label;
