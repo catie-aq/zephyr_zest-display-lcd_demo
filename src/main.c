@@ -59,7 +59,6 @@ static const struct pwm_dt_spec pwm_dev =
 static const struct device *const touch_dev =
     DEVICE_DT_GET(DT_NODELABEL(tsc20030));
 
-static struct k_sem sync;
 static struct {
     size_t x;
     size_t y;
@@ -129,7 +128,6 @@ static void touch_event_callback(struct input_event *evt) {
             touch_point.x = (int16_t)(cal_coeff_x.a * raw_x + cal_coeff_x.b);
             touch_point.y = (int16_t)(cal_coeff_y.a * raw_y + cal_coeff_y.b);
             printk("TOUCH: X=[%d] Y=[%d]\n", touch_point.x, touch_point.y);
-            k_sem_give(&sync);
         }
     }
 }
@@ -194,15 +192,12 @@ int main(void) {
     display_blanking_off(display_dev);
     if (setup_pwm() < 0 || setup_button() < 0) return 0;
 
-    k_sem_init(&sync, 0, 1);
     cal_coeff_x.a = cal_coeff_y.a = 1.0;
     cal_coeff_x.b = cal_coeff_y.b = 0.0;
 
      while (1) {
         if (is_calibration_mode) {
             lv_label_set_text(hello_world_label, "Calibration");
-
-            k_sem_take(&sync, K_FOREVER);
 
             if (touch_point.pressed) {
               printk("Calibration [%d]\n", point_index);
