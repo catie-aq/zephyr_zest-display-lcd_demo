@@ -1,97 +1,41 @@
-.. zephyr:code-sample:: blinky
-   :name: Blinky
-   :relevant-api: gpio_interface
+.. 6tron:code-sample:: zephyr_zest_display-lcd_demo
+   :name: zephyr_zest_display-lcd_demo
+   :relevant-api: input_events display_interface
 
-   Blink an LED forever using the GPIO API.
+   Visualize touch events on a display.
 
 Overview
 ********
-
-The Blinky sample blinks an LED forever using the :ref:`GPIO API <gpio_api>`.
-
-The source code shows how to:
-
-#. Get a pin specification from the :ref:`devicetree <dt-guide>` as a
-   :c:struct:`gpio_dt_spec`
-#. Configure the GPIO pin as an output
-#. Toggle the pin forever
-
-See :zephyr:code-sample:`pwm-blinky` for a similar sample that uses the PWM API instead.
-
-.. _blinky-sample-requirements:
-
-Requirements
-************
-
-Your board must:
-
-#. Have an LED connected via a GPIO pin (these are called "User LEDs" on many of
-   Zephyr's :ref:`boards`).
-#. Have the LED configured using the ``led0`` devicetree alias.
+This sample will draw a small plus in the last touched coordinates, that way you can check
+if the touch screen works for a board, examine its parameters such as inverted/swapped axes.
 
 Building and Running
 ********************
+Below is an example on how to build the sample for :6tron:board:`zest_core_stm32l4a6rg`:
 
-Build and flash Blinky as follows, changing ``reel_board`` for your board:
+```shell
+cd <driver_directory>
+west build -p always -b zest_core_stm32l4a6rg samples/
+west flash
+```
+Calibration
+***********
+- Enter Calibration Mode: Press the SW0 button.
+- Touch Calibration Points: Follow the on-screen prompts to touch each of the five calibration points.
+- Calibration Completion: Once all points are collected, calibration coefficients are computed.
 
-.. zephyr-app-commands::
-   :zephyr-app: samples/basic/blinky
-   :board: reel_board
-   :goals: build flash
-   :compact:
+# Sample Output
 
-After flashing, the LED starts to blink and messages with the current LED state
-are printed on the console. If a runtime error occurs, the sample exits without
-printing to the console.
+```shell
+*** Booting Zephyr OS ***
+Calibration mode activated.
+Calibration point 1: X=[20], Y=[20]
+Calibration point 2: X=[108], Y=[20]
+Calibration point 3: X=[108], Y=[140]
+Calibration point 4: X=[20], Y=[140]
+Calibration point 5: X=[64], Y=[80]
+Calibration complete.
+Touch X, Y: (50, 75)
+Touch X, Y: (100, 125)
+```
 
-Build errors
-************
-
-You will see a build error at the source code line defining the ``struct
-gpio_dt_spec led`` variable if you try to build Blinky for an unsupported
-board.
-
-On GCC-based toolchains, the error looks like this:
-
-.. code-block:: none
-
-   error: '__device_dts_ord_DT_N_ALIAS_led_P_gpios_IDX_0_PH_ORD' undeclared here (not in a function)
-
-Adding board support
-********************
-
-To add support for your board, add something like this to your devicetree:
-
-.. code-block:: DTS
-
-   / {
-   	aliases {
-   		led0 = &myled0;
-   	};
-
-   	leds {
-   		compatible = "gpio-leds";
-   		myled0: led_0 {
-   			gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
-                };
-   	};
-   };
-
-The above sets your board's ``led0`` alias to use pin 13 on GPIO controller
-``gpio0``. The pin flags :c:macro:`GPIO_ACTIVE_HIGH` mean the LED is on when
-the pin is set to its high state, and off when the pin is in its low state.
-
-Tips:
-
-- See :dtcompatible:`gpio-leds` for more information on defining GPIO-based LEDs
-  in devicetree.
-
-- If you're not sure what to do, check the devicetrees for supported boards which
-  use the same SoC as your target. See :ref:`get-devicetree-outputs` for details.
-
-- See :zephyr_file:`include/zephyr/dt-bindings/gpio/gpio.h` for the flags you can use
-  in devicetree.
-
-- If the LED is built in to your board hardware, the alias should be defined in
-  your :ref:`BOARD.dts file <devicetree-in-out-files>`. Otherwise, you can
-  define one in a :ref:`devicetree overlay <set-devicetree-overlays>`.
