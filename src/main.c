@@ -183,7 +183,7 @@ int main(void) {
     if (!device_is_ready(display_dev)) return 0;
 
     cross_label = lv_label_create(lv_scr_act());
-    lv_label_set_text(cross_label, "");
+    lv_label_set_text(cross_label, "x");
 
     hello_world_label = lv_label_create(lv_scr_act());
     display_message("6TRON BY CATIE!");
