@@ -24,7 +24,8 @@ Calibration
 - Touch Calibration Points: Follow the on-screen prompts to touch each of the five calibration points.
 - Calibration Completion: Once all points are collected, calibration coefficients are computed.
 
-# Sample Output
+Samples Output
+**************
 
 ```shell
 *** Booting Zephyr OS ***
