@@ -1,9 +1,3 @@
-.. 6tron:code-sample:: zephyr_zest_display-lcd_demo
-   :name: zephyr_zest_display-lcd_demo
-   :relevant-api: input_events display_interface
-
-   Visualize touch events on a display.
-
 Overview
 ********
 This sample will draw a small plus in the last touched coordinates, that way you can check
@@ -11,11 +5,9 @@ if the touch screen works for a board, examine its parameters such as inverted/s
 
 Building and Running
 ********************
-Below is an example on how to build the sample for :6tron:board:`zest_core_stm32l4a6rg`:
-
 ```shell
 cd <driver_directory>
-west build -p always -b zest_core_stm32l4a6rg samples/
+west build -p always -b <BOARD>
 west flash
 ```
 Calibration
@@ -39,4 +31,3 @@ Calibration complete.
 Touch X, Y: (50, 75)
 Touch X, Y: (100, 125)
 ```
-
