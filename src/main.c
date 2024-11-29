@@ -5,10 +5,7 @@
 
 #include <inttypes.h>
 #include <lvgl.h>
-#include <stdio.h>
-#include <string.h>
 #include <zephyr/device.h>
-#include <zephyr/devicetree.h>
 #include <zephyr/drivers/display.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/drivers/pwm.h>
@@ -16,8 +13,6 @@
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/sys/util.h>
-#include <zephyr/sys/printk.h>
-#include <math.h>
 
 LOG_MODULE_REGISTER(calibration_app, LOG_LEVEL_INF);
 
@@ -212,6 +207,7 @@ int main(void)
 	if (!device_is_ready(display_dev)) {
 		return 0;
 	}
+	LOG_INF("Start.\n");
 
 	cross_label = lv_label_create(lv_scr_act());
 	lv_label_set_text(cross_label, "x");
@@ -240,7 +236,6 @@ int main(void)
 				point_index++;
 				if (point_index >= CALIBRATION_POINTS) {
 					is_calibration_mode = false;
-					// lv_label_set_text(cross_label, "");
 					calculate_calibration_coefficients();
 					LOG_INF("Calibration done.\n");
 				} else {
